@@ -9,10 +9,11 @@
 \usepackage{amsfonts}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage{pdfpages}
 
 \title{Report of Project: Forward-Planning Agent}
 \author{Israel G. de Oliveira}
-\date{January 6, 2019}
+\date{January 8, 2019}
 \begin{document}
 \maketitle
 
@@ -37,7 +38,7 @@ The planning problems used is based on the example Air Cargo Problem, 10.1.1 fro
         \label{airps}
 \end{table}
 
-One way to solve this problems is use a graph representation connecting all logic literals and possible actions. With a graph, it is possible to use a search algorithm to find a solution \cite{russell2009artificial}. Not only, for some search algorithms, it is possible to use a heuristic method to estimate the cost for each action (connection in graph), in some cases, improving the finding for a solution (less time expending on searching).
+One way to solve this problems is use a graph representation connecting all logic literals and possible actions. With a graph, it is possible to use a search algorithm to find a solution \cite{russell2009artificial}. Not only, for some search algorithms, it is possible to use a heuristic method to estimate the cost for each node (in graph), in some cases, improving the finding for a solution (less time expending on searching).
 
 \subsection{Search Algorithms}
 
@@ -45,9 +46,9 @@ The search algorithms proposed to use are Breadth First Search (BFS), Depth Firs
 
 BFS is a instance of the tree search with FIFO (First In, First Out) queue. This algorithm is complete (completeness aspect). The solution is not necessarily optimal: because when a objective node is found at a (depth) level $d$ it is not necessarily the best objective node. The total new nodes is $O(b^d)$ with $b$ successors. 
 
-Considering the same step cost 1 for all nodes, we have the BFS. For achieve the UCS, we do a extended version considering a step cost function $g(n)$, for a $n$-node, then is possible to achieve a optimal solution. Basically, expanding the node with the lowest cost. There are more two differences from BFS: the first is when the objective node is selected for expansion, and not when it is generated, the second is the additional test, to find a possible better path for a objective node. The solution is, generally, optimal. The completeness is not guaranteed, because the number of steps in a path is not relevant, only your cost. If there is a infinity sequence of actions with zero cost (like \emph{NoOp} actions), the search is not finite. The complexity is $O(b^{1+ \lfloor C*/\epsilon \rfloor})$, with the optimal solution cost $C*$ and lowest action cost $\epsilon$. If all actions have the same cost, the complexity is $O(b^{d+1})$. In this case, UCS expands all nodes of the same depth, even though the solution has already been found (at this depth).
+Considering the same step cost 1 for all nodes, we have the BFS. For achieve the UCS, we do a extended version considering a step cost function $g(n)$, for a $n$-node, then is possible to achieve a optimal solution. Basically, expanding the node with the lowest cost. There are more two differences from BFS: the first is when the objective node is selected for expansion, and not when it is generated, the second is the additional test, to find a possible better path for a objective node. The solution is, generally, optimal. The completeness is not guaranteed, because the number of steps in a path is not relevant, only your cost. If there is a infinity sequence of actions with zero cost (like \emph{NoOp} actions), the search is not finite. The complexity is $O(b^{1+ \lfloor C^*/\epsilon \rfloor})$, with the optimal solution cost $C^*$ and lowest action cost $\epsilon$. If all actions have the same cost, the complexity is $O(b^{d+1})$. In this case, UCS expands all nodes of the same depth, even though the solution has already been found (at this depth).
 
-DFS is a instance of graph (tree) search with a LIFO (Last in, First out) queue. This algorithm search the nodes without repetition (and redundant paths). The graph version is finite, but the tree not. The complexity is $O(b^M)$, with $m$ the max depth of any node. Observe that $m$ can be infinite, even greater than the state space. The advantage in use this algorithm is the space complexity: $O(bm)$, using much less memory. As the algorithm returns the solution when it finds the first objective node, ignoring other possible best nodes, the solution is not, necessarily, optimal.
+DFS is a instance of graph (tree) search with a LIFO (Last in, First out) queue. This algorithm search the nodes without repetition (and redundant paths). The graph version is finite, but the tree not. The complexity is $O(b^m)$, with $m$ the max depth of any node. Observe that $m$ can be infinite, even greater than the state space. The advantage in use this algorithm is the space complexity: $O(bm)$, using much less memory. As the algorithm returns the solution when it finds the first objective node, ignoring other possible best nodes, the solution is not, necessarily, optimal.
 
 GBFGS try expand the node nearest from the objective, with the idea of finding the solution quickly. In this way, only the heuristic function is considered. Even with a finite states, the completeness is not guaranteed. The complexity is $O(b^{\epsilon d})$, with $m$ the max depth of state-space. The solution is not, necessarily, optimal because the greedy aspect, trying always get closer to node objective, choosing paths larger than possible others with intermediate nodes further from the node objective.
 
@@ -169,21 +170,21 @@ A* w. SetLevel & 12
 %\subsubsection{PG Max-Level Heuristic}
 %\subsubsection{PG Set-Level Heuristic}
 
-In Figure \ref{figsm234} we observe what is expected: the UCS and BFS expand more than DFS. In problem 1 and 2, the behavior is practically equal, differing drastically in problem 3 and 4. The graph representing the problem 3 is more depth than problem 2 (or problem 2 is more wide). That explain how much larger is the plan length given by DFS for all problems and why the time consumption is lowest in p. 3 in relation to p.2. Other thing that is possible to infer from Figure \ref{figsm231}, is the larger time taken with p. 4, because the graph if not only deeper then others, but is larger (wide). The little difference between UCS and BFS may be explain because both search the objective trying find the shortest path, for BFS, and the cheaper path, for UCS, but UCS takes a bit more time (and expansion) because the search continuous trying to find a cheaper path (than reached).
+In Figure \ref{figsm234} we observe what is expected: the UCS and BFS expand more than DFS. In problem 1 and 2, the behavior is practically equal, differing drastically in problem 3 and 4. The graph representing the problem 3 is more depth than problem 2 (or problem 2 is more wide). That explain how much larger is the plan length given by DFS for all problems and why the time consumption is lowest in p. 3 in relation to p. 2. Other thing that is possible to infer from Figure \ref{figsm231}, is the larger time taken with p. 4, because the graph if not only deeper then others, but is larger (wide). The little difference between UCS and BFS may be explain because both search the objective trying find the shortest path, for BFS, and the cheaper path, for UCS, but UCS takes a bit more time (and expansion) because the search continuous trying to find a cheaper path (than reached).
 
 \begin{figure}[htpb]
 \begin{center}
 \includegraphics[width=1\columnwidth]{fig/results_sm234.png}
-\caption{Search algorithms without heuristic.}
 \end{center}
+\caption{Search algorithms without heuristic.}
 \label{figsm234}
 \end{figure}
     
 \begin{figure}[htpb]
 \begin{center}
 \includegraphics[width=1\columnwidth]{fig/results_sm231.png}
-\caption{Search algorithms without heuristic.}
 \end{center}
+\caption{Search algorithms without heuristic.}
 \label{figsm231}
 \end{figure}
 
@@ -191,15 +192,15 @@ In Figure \ref{figsm234} we observe what is expected: the UCS and BFS expand mor
 
 
         
-GBFGS algorithm takes more time, as seen on Figure \ref{fig131}, than all others, bot less expansions than UCS and BFS, Figure \ref{fig134}. For p. 1 and 3, the solution is optimal, but for p. 2 and 4, is not optimal, some solutions is near optimal. This results is espected because, even with a good heuristc, the search try expand to node closest to objective, doing something like a penalization of the other nodes (possible other better paths). 
+GBFGS algorithm takes more time, as seen on Figure \ref{fig131}, than all others, bot less expansions than UCS and BFS, Figure \ref{fig134}. For p. 1 and 3, the solution is optimal, but for p. 2 and 4, is not optimal, some solutions is near optimal. This results is expected because, even with a good heuristic, the search try expand to node closest to objective, doing something like a penalization of the other nodes (possible other better paths). 
 %\subsection{Greedy Best First Graph Search}
 
 \begin{figure}[htpb]
 \begin{center}
 \includegraphics[width=1\columnwidth]{fig/results_131.png}
 %\caption{Search Method GBFGS}
-\caption{Greedy Best First Graph.}
 \end{center}
+\caption{Greedy Best First Graph.}
 \label{fig131}
 \end{figure}
 
@@ -207,20 +208,20 @@ GBFGS algorithm takes more time, as seen on Figure \ref{fig131}, than all others
 \begin{center}
 \includegraphics[width=1\columnwidth]{fig/results_134.png}
 %\caption{Search Method GBFGS}
-\caption{Greedy Best First Graph.}
 \end{center}
+\caption{Greedy Best First Graph.}
 \label{fig134}
 \end{figure}
 
 %\subsection{A* Search}
-The A* search is the algorithm with the lesser number of expansions, as seen in Figure \ref{fig034}, and not much time in comparisson with the others, Figure \ref{fig031}. Roughly, is possible to infer that this searh algorithm is the best choise for this problem domain. THis results is espected, because A* uses a better cost function, considering not only the cost to objective, but plus the costo from initial node to a possible expanded node. Considering the heristics, for A* and GBFGS, it is possible to infer that Unmet Goals presents the better results: the search algorithm takes much less time and achive good solution (almost all aoptimal). 
+The A* search is the algorithm with the lesser number of expansions, as seen in Figure \ref{fig034}, and not much time in comparison with the others, Figure \ref{fig031}. Roughly, is possible to infer that this search algorithm is the best choice for this problem domain. This results is expected, because A* uses a better cost function, considering not only the cost to objective, but plus the cost from initial node to a possible expanded node. Considering the heuristics, for A* and GBFGS, it is possible to infer that Unmet Goals presents the better results: the search algorithm takes much less time and achieve good solutions (almost all optimal). 
 
 \begin{figure}[htpb]
 \begin{center}
 \includegraphics[width=1\columnwidth]{fig/results_034.png}
 %\caption{Search Method AS}
-\caption{A*.}
 \end{center}
+\caption{A*.}
 \label{fig034}
 \end{figure}
         
@@ -231,14 +232,14 @@ The A* search is the algorithm with the lesser number of expansions, as seen in 
 \begin{center}
 \includegraphics[width=1\columnwidth]{fig/results_031.png}
 %\caption{Search Method AS}
-\caption{A*.}
 \end{center}
+\caption{A*.}
 \label{fig031}
 \end{figure}
 
 
 
-In \cite{githubUdacityAINDProj2} is prpososed to awnser somes questions about this work. 
+In \cite{githubUdacityAINDProj2} is proposed to answer some questions about this work. 
 
 \begin{itemize}
     \item Which algorithm or algorithms would be most appropriate for planning in a very restricted domain (i.e., one that has only a few actions) and needs to operate in real time?
@@ -259,14 +260,16 @@ In \cite{githubUdacityAINDProj2} is prpososed to awnser somes questions about th
 
 \section{Conclusion}
 
-With this work, is possibel to experiment some search algorithms and heuristics appling to a comceptual logistic problem. The different scales of the problem (different size of graphs) diversify the effects and results that, which shows the different characteristics between the search methods.
+With this work, is possible to experiment some search algorithms and heuristics applying to a conceptual logistic problem. The different scales of the problem (different size of graphs) diversify the effects and results that, which shows the different characteristics between the search methods.
 
-As expected,  the A* search algorithm presentes the overall best results and, not so expected, the DFGS presentes the wort results. Of course, only with these four search problems is it not possible to evaluate the methods in a general and conclusive way, but one can extract good experience and good notions from each one.
-
-\section{Appendix A: Full table of the results.}
-
+As expected,  the A* search algorithm presents the overall best results and, not so expected, the DFGS presents the wort results. Of course, only with these four search problems is it not possible to evaluate the methods in a general and conclusive way, but one can extract good experience and good notions from each one.
 
 
 \bibliographystyle{IEEEtran}
 \bibliography{bibliography.bib}
+
+%\appendix
+%\section{Jupyter Notebook: processing the results.}
+%\includepdf{analise.pdf}
+
 \end{document}
