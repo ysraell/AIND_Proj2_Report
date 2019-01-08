@@ -65,7 +65,95 @@ Basically, with a good heuristic is possible to achieve a better performance usi
 
 \section{Search Algorithms Results}
 
-For all experiments, was used a Intel(R) Xeon(R) CPU E3-1241 v3 @ 3.50GHz, on Ubuntu 18.04.1 LTS, Linux kernel 4.15.0-43-generic and PyPy 6.0.0 with GCC 4.8.2. All results, without the \path{my_planning_graph.py}, is availiable in \cite{githubYsraellAIND}.
+For all experiments, was used a Intel(R) Xeon(R) CPU E3-1241 v3 @ 3.50GHz, on Ubuntu 18.04.1 LTS, Linux kernel 4.15.0-43-generic and PyPy 6.0.0 with GCC 4.8.2. All results, without the \path{my_planning_graph.py}, is available in \cite{githubYsraellAIND}. All analysis of the results is based on \cite{russell2009artificial}.
+
+In table \ref{airps1}, for problem 1, only DFGS not achieve the optimal solution. In table \ref{airps2}, problem 2, A*, UCS and BFS achieved the optimal solution. 
+
+\begin{table}[htpb]
+    \caption{Air Cargo Problem 1}
+    \centering
+    \begin{tabular}{ l | c }
+    Search Method & Plan length \\ \hline 
+BFS & 9 \\
+DFGS & 619 \\
+UCS & 9 \\
+GBFGS w. Unmet Goals & 9 \\
+GBFGS w. LevelSum & 9 \\
+GBFGS w. MaxLevel & 9 \\
+GBFGS w. SetLevel & 9 \\
+A* w. Unmet Goals & 9 \\
+A* w. LevelSum & 9 \\
+A* w. MaxLevel & 9 \\
+A* w. SetLevel & 9
+\end{tabular}
+    \label{airps1}
+    \end{table}
+
+    
+\begin{table}[htpb]
+    \caption{Air Cargo Problem 2}
+    \centering
+    \begin{tabular}{ l | c }
+    Search Method & Plan length \\ \hline 
+BFS & 14 \\
+DFGS & 24132 \\
+UCS & 14 \\
+GBFGS w. Unmet Goals & 18 \\
+GBFGS w. LevelSum & 17 \\
+GBFGS w. MaxLevel & 17 \\
+GBFGS w. SetLevel & 23 \\
+A* w. Unmet Goals & 14 \\
+A* w. LevelSum & 15 \\
+A* w. MaxLevel & 14 \\
+A* w. SetLevel & 14
+\end{tabular}
+    \label{airps2}
+    \end{table}
+
+For the other problems 3 and 4, it is similar to the other two problems. A*, UCS and BFS achieved the optimal solution, save some differences between heuristics. 
+    
+\begin{table}[htpb]
+    \caption{Air Cargo Problem 3}
+    \centering
+    \begin{tabular}{ l | c }
+    Search Method & Plan length \\ \hline 
+BFS & 6 \\
+DFGS & 20 \\
+UCS & 6 \\
+GBFGS w. Unmet Goals & 6 \\
+GBFGS w. LevelSum & 6 \\
+GBFGS w. MaxLevel & 6 \\
+GBFGS w. SetLevel & 6 \\
+A* w. Unmet Goals & 6 \\
+A* w. LevelSum & 6 \\
+A* w. MaxLevel & 6 \\
+A* w. SetLevel & 6
+\end{tabular}
+    \label{airps3}
+    \end{table}
+
+    
+\begin{table}[htpb]
+    \caption{Air Cargo Problem 4}
+    \centering
+    \begin{tabular}{ l | c }
+    Search Method & Plan length \\ \hline 
+BFS & 12 \\
+DFGS & 392 \\
+UCS & 12 \\
+GBFGS w. Unmet Goals & 15 \\
+GBFGS w. LevelSum & 14 \\
+GBFGS w. MaxLevel & 13 \\
+GBFGS w. SetLevel & 17 \\
+A* w. Unmet Goals & 12 \\
+A* w. LevelSum & 12 \\
+A* w. MaxLevel & 12 \\
+A* w. SetLevel & 12
+\end{tabular}
+    \label{airps4}
+    \end{table}
+    
+\newpage
 
 %\subsection{BFS: Breadth First Search}
 %\subsection{DFS: Depth First Graph Search}
@@ -99,7 +187,33 @@ In Figure \ref{figsm234} we observe what is expected: the UCS and BFS expand mor
 \label{figsm231}
 \end{figure}
 
+%\subsection{Greedy Best First Graph Search}
+
+
+        
+GBFGS algorithm takes more time, as seen on Figure \ref{fig131}, than all others, bot less expansions than UCS and BFS, Figure \ref{fig134}. For p. 1 and 3, the solution is optimal, but for p. 2 and 4, is not optimal, some solutions is near optimal. This results is espected because, even with a good heuristc, the search try expand to node closest to objective, doing something like a penalization of the other nodes (possible other better paths). 
+%\subsection{Greedy Best First Graph Search}
+
+\begin{figure}[htpb]
+\begin{center}
+\includegraphics[width=1\columnwidth]{fig/results_131.png}
+%\caption{Search Method GBFGS}
+\caption{Greedy Best First Graph.}
+\end{center}
+\label{fig131}
+\end{figure}
+
+\begin{figure}[htpb]
+\begin{center}
+\includegraphics[width=1\columnwidth]{fig/results_134.png}
+%\caption{Search Method GBFGS}
+\caption{Greedy Best First Graph.}
+\end{center}
+\label{fig134}
+\end{figure}
+
 %\subsection{A* Search}
+The A* search is the algorithm with the lesser number of expansions, as seen in Figure \ref{fig034}, and not much time in comparisson with the others, Figure \ref{fig031}. Roughly, is possible to infer that this searh algorithm is the best choise for this problem domain. THis results is espected, because A* uses a better cost function, considering not only the cost to objective, but plus the costo from initial node to a possible expanded node. Considering the heristics, for A* and GBFGS, it is possible to infer that Unmet Goals presents the better results: the search algorithm takes much less time and achive good solution (almost all aoptimal). 
 
 \begin{figure}[htpb]
 \begin{center}
@@ -121,122 +235,37 @@ In Figure \ref{figsm234} we observe what is expected: the UCS and BFS expand mor
 \end{center}
 \label{fig031}
 \end{figure}
-        
 
-%\subsection{Greedy Best First Graph Search}
 
-\begin{figure}[htpb]
-\begin{center}
-\includegraphics[width=1\columnwidth]{fig/results_134.png}
-%\caption{Search Method GBFGS}
-\caption{Greedy Best First Graph.}
-\end{center}
-\label{fig134}
-\end{figure}
-        
 
-%\subsection{Greedy Best First Graph Search}
+In \cite{githubUdacityAINDProj2} is prpososed to awnser somes questions about this work. 
 
-\begin{figure}[htpb]
-\begin{center}
-\includegraphics[width=1\columnwidth]{fig/results_131.png}
-%\caption{Search Method GBFGS}
-\caption{Greedy Best First Graph.}
-\end{center}
-\label{fig131}
-\end{figure}
-        
-\newpage
-
-\subsection{Search Method vs. Plan length}
-
-\begin{table}[htpb]
-    \caption{Air Cargo Problem 1}
-    \centering
-    \begin{tabular}{ l | c }
-    Search Method & Plan length \\ \hline 
-BFS & 9 \\
-DFGS & 619 \\
-UCS & 9 \\
-GBFGS w. Unmet Goals & 9 \\
-GBFGS w. LevelSum & 9 \\
-GBFGS w. MaxLevel & 9 \\
-GBFGS w. SetLevel & 9 \\
-AS w. Unmet Goals & 9 \\
-AS w. LevelSum & 9 \\
-AS w. MaxLevel & 9 \\
-AS w. SetLevel & 9
-\end{tabular}
-    \label{airps1}
-    \end{table}
-
+\begin{itemize}
+    \item Which algorithm or algorithms would be most appropriate for planning in a very restricted domain (i.e., one that has only a few actions) and needs to operate in real time?
     
-\begin{table}[htpb]
-    \caption{Air Cargo Problem 2}
-    \centering
-    \begin{tabular}{ l | c }
-    Search Method & Plan length \\ \hline 
-BFS & 14 \\
-DFGS & 24132 \\
-UCS & 14 \\
-GBFGS w. Unmet Goals & 18 \\
-GBFGS w. LevelSum & 17 \\
-GBFGS w. MaxLevel & 17 \\
-GBFGS w. SetLevel & 23 \\
-AS w. Unmet Goals & 14 \\
-AS w. LevelSum & 15 \\
-AS w. MaxLevel & 14 \\
-AS w. SetLevel & 14
-\end{tabular}
-    \label{airps2}
-    \end{table}
-
+    R: In this domain, with the problems formatted as shown, BFS, UCS and A* are good choices when we looking for optimal planning. In restricted domain, all of these algorithm takes a short time.
     
-\begin{table}[htpb]
-    \caption{Air Cargo Problem 3}
-    \centering
-    \begin{tabular}{ l | c }
-    Search Method & Plan length \\ \hline 
-BFS & 6 \\
-DFGS & 20 \\
-UCS & 6 \\
-GBFGS w. Unmet Goals & 6 \\
-GBFGS w. LevelSum & 6 \\
-GBFGS w. MaxLevel & 6 \\
-GBFGS w. SetLevel & 6 \\
-AS w. Unmet Goals & 6 \\
-AS w. LevelSum & 6 \\
-AS w. MaxLevel & 6 \\
-AS w. SetLevel & 6
-\end{tabular}
-    \label{airps3}
-    \end{table}
-
+    \item Which algorithm or algorithms would be most appropriate for planning in very large domains (e.g., planning delivery routes for all UPS drivers in the U.S. on a given day)?
     
-\begin{table}[htpb]
-    \caption{Air Cargo Problem 4}
-    \centering
-    \begin{tabular}{ l | c }
-    Search Method & Plan length \\ \hline 
-BFS & 12 \\
-DFGS & 392 \\
-UCS & 12 \\
-GBFGS w. Unmet Goals & 15 \\
-GBFGS w. LevelSum & 14 \\
-GBFGS w. MaxLevel & 13 \\
-GBFGS w. SetLevel & 17 \\
-AS w. Unmet Goals & 12 \\
-AS w. LevelSum & 12 \\
-AS w. MaxLevel & 12 \\
-AS w. SetLevel & 12
-\end{tabular}
-    \label{airps4}
-    \end{table}
-
+    R: The best choice may be A* with heuristic Unmet Goals, because this take a good relationship between time and quality of plan (optimal plan).
+    
+    \item Which algorithm or algorithms would be most appropriate for planning problems where it is important to find only optimal plans?
+    
+    UCS and BFS are the right choices, find the optimal solution in all problems. However, the A* with some good heuristic should be considered secondarily. 
+    
+\end{itemize}
+    
 \newpage
 
 \section{Conclusion}
-t
+
+With this work, is possibel to experiment some search algorithms and heuristics appling to a comceptual logistic problem. The different scales of the problem (different size of graphs) diversify the effects and results that, which shows the different characteristics between the search methods.
+
+As expected,  the A* search algorithm presentes the overall best results and, not so expected, the DFGS presentes the wort results. Of course, only with these four search problems is it not possible to evaluate the methods in a general and conclusive way, but one can extract good experience and good notions from each one.
+
+\section{Appendix A: Full table of the results.}
+
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{bibliography.bib}
