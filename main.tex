@@ -81,6 +81,8 @@ For all experiments, was used a Intel(R) Xeon(R) CPU E3-1241 v3 @ 3.50GHz, on Ub
 %\subsubsection{PG Max-Level Heuristic}
 %\subsubsection{PG Set-Level Heuristic}
 
+In Figure \ref{figsm234} we observe what is expected: the UCS and BFS expand more than DFS. In problem 1 and 2, the behavior is practically equal, differing drastically in problem 3 and 4. The graph representing the problem 3 is more depth than problem 2 (or problem 2 is more wide). That explain how much larger is the plan length given by DFS for all problems and why the time consumption is lowest in p. 3 in relation to p.2. Other thing that is possible to infer from Figure \ref{figsm231}, is the larger time taken with p. 4, because the graph if not only deeper then others, but is larger (wide). The little difference between UCS and BFS may be explain because both search the objective trying find the shortest path, for BFS, and the cheaper path, for UCS, but UCS takes a bit more time (and expansion) because the search continuous trying to find a cheaper path (than reached).
+
 \begin{figure}[htpb]
 \begin{center}
 \includegraphics[width=1\columnwidth]{fig/results_sm234.png}
@@ -89,8 +91,6 @@ For all experiments, was used a Intel(R) Xeon(R) CPU E3-1241 v3 @ 3.50GHz, on Ub
 \label{figsm234}
 \end{figure}
     
-
-
 \begin{figure}[htpb]
 \begin{center}
 \includegraphics[width=1\columnwidth]{fig/results_sm231.png}
